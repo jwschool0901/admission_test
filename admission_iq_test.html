@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokutei Gino - Admission Cognitive & IQ Test (Instruction Fixed)</title>
+    <style>
+        :root {
+            --primary-blue: #0f2b5c;
+            --light-blue: #1d4ed8;
+            --bg-gray: #f1f5f9;
+            --text-dark: #1e293b;
+            --accent-purple: #6d28d9;
+            --accent-red: #ba2525;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: var(--bg-gray);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+        }
+
+        .global-header {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .globe-icon { font-size: 28px; }
+        .site-info { text-align: left; font-size: 12px; opacity: 0.9; line-height: 1.4; }
+        .site-title { font-size: 16px; font-weight: bold; margin: 0; }
+
+        .lang-selector select {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            outline: none;
+            font-size: 14px;
+        }
+        .lang-selector select option { color: black; }
+
+        .main-content { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #6d28d9, #4c1d95);
+            color: white;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(109, 40, 217, 0.3);
+        }
+
+        h2 { color: var(--primary-blue); font-size: 24px; margin-top: 10px; margin-bottom: 20px; }
+        .description { font-size: 16px; line-height: 1.6; color: #475569; margin-bottom: 30px; text-align: left; }
+
+        .highlight-box {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--accent-purple);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .btn {
+            background-color: var(--accent-purple);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
+            transition: background 0.2s;
+        }
+        .btn:hover { background-color: #5b21b6; }
+
+        .timer-bar { font-size: 22px; font-weight: bold; color: #ea580c; margin-bottom: 10px; }
+        .progress-container { width: 100%; background-color: #e2e8f0; border-radius: 10px; height: 8px; margin-bottom: 15px; overflow: hidden; }
+        .progress-fill { height: 100%; background-color: var(--accent-purple); width: 0%; transition: width 0.3s ease; }
+        .progress-bar { font-size: 14px; color: #64748b; margin-bottom: 25px; }
+
+        .question-text {
+            font-size: 21px;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 25px;
+            text-align: left;
+            line-height: 1.5;
+        }
+
+        .memory-alert {
+            color: var(--accent-red);
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            animation: blink 1s infinite alternate;
+        }
+
+        @keyframes blink {
+            0% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        .question-visual {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 140px;
+        }
+
+        .math-display {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--primary-blue);
+            letter-spacing: 4px;
+        }
+
+        .options-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .option-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--text-dark);
+            min-height: 60px;
+        }
+
+        .option-card:hover {
+            border-color: var(--accent-purple);
+            background-color: #f5f3ff;
+            transform: translateY(-2px);
+        }
+
+        .result-score { font-size: 64px; font-weight: bold; color: var(--accent-purple); margin: 25px 0; }
+        
+        .analysis-section {
+            text-align: left;
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+            line-height: 1.8;
+        }
+
+        .hidden { display: none !important; }
+        svg { max-width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+
+    <div class="global-header">
+        <div class="header-left">
+            <span class="globe-icon">🧠</span>
+            <div class="site-info">
+                <div class="site-title" id="nav-title">特定技能候補者 認知能力テスト</div>
+                <span id="nav-stats">地頭・記憶力測定システム</span>
+            </div>
+        </div>
+        <div class="lang-selector">
+            <select id="langSelect" onchange="changeLanguage()">
+                <option value="ja" selected>日本語 (Japanese)</option>
+                <option value="id">Bahasa Indonesia (Indonesian)</option>
+                <option value="ne">नेपाली (Nepali)</option>
+                <option value="my">မြန်မာဘာသာ (Myanmar)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="card">
+            <div class="badge">COGNITIVE</div>
+
+            <div id="start-screen">
+                <h2 id="main-title">入学・入校前 基礎認知能力テスト</h2>
+                <div class="description" id="main-desc">
+                    このテストは、候補生の「言葉を覚える記憶の土台（短期記憶力）」や「問題解決の早さ（論理的思考力）」を、言語の壁をなくして測定するためのテストです。図形パズルと言語フリーの数字問題で構成されています。
+                </div>
+                <div class="highlight-box" id="info-box">
+                    • <strong>制限時間:</strong> 5分（全10問・スピードも測定されます）<br>
+                    • <strong>前半5問:</strong> 図形の法則性を見抜く形認識パズル<br>
+                    • <strong>後半5問:</strong> 数字の規則性と、日本語の暗記力に直結する短期記憶問題（案内ガイダンス機能付き）
+                </div>
+                <button class="btn" id="start-btn" onclick="startTest()">テストを開始する / Start Test →</button>
+            </div>
+
+            <div id="test-screen" class="hidden">
+                <div class="timer-bar" id="timer">05:00</div>
+                <div class="progress-container">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-bar" id="progress">問題 1 / 10</div>
+                
+                <div class="memory-alert hidden" id="guidance-alert">⚠️ 3秒で数字を暗記してください！</div>
+                <div class="question-text" id="instruction">空欄に入る最も適切なものを選択してください：</div>
+                
+                <div class="question-visual" id="question-area"></div>
+                <div class="options-container" id="options-area"></div>
+            </div>
+
+            <div id="result-screen" class="hidden">
+                <h2 id="result-heading">認知能力・ポテンシャル分析結果</h2>
+                <div class="result-score" id="score-display">スコア --</div>
+                
+                <div class="analysis-section" id="report-desc"></div>
+                <button class="btn" style="background-color: var(--primary-blue); margin-top:25px;" onclick="location.reload()">次の生徒のテストへ</button>
+            </div>
+
+        </div>
+    </div>
+
+<script>
+    const translations = {
+        ja: {
+            navTitle: "特定技能候補者 認知能力テスト", navStats: "地頭・記憶力測定システム",
+            mainTitle: "入学・入校前 基礎認知能力テスト",
+            mainDesc: "このテストは、候補生の「言葉を覚える記憶の土台（短期記憶力）」や「問題解決の早さ（論理的思考力）」を、言語の壁をなくして測定するためのテストです。図形パズルと言語フリーの数字問題で構成されています。",
+            infoBox: "• <strong>制限時間:</strong> 5分（全10問）<br>• <strong>前半5問:</strong> 図形の法則性を見抜く形認識パズル<br>• <strong>後半5問:</strong> 数字の規則性と、日本語の暗記力に直結する短期記憶問題",
+            startBtn: "テストを開始する / Start Test →", progress: "問題 {current} / {total}",
+            instructionVisual: "空欄（？など）に入る最も適切なものを選択してください：",
+            instructionMath: "空欄（？など）に入る最も適切な数字を選択してください：",
+            instructionMemoryBefore: "⚠️ 3秒間で、画面の数字を絶対に覚えてください！",
+            instructionMemoryAfter: "今消えた数字と同じ並びのものを、下から1つ選んでください：",
+            resultHeading: "認知能力・ポテンシャル分析結果"
+        },
+        id: {
+            navTitle: "Tes Kemampuan Kognitif", navStats: "Pengukuran Logika & Memori",
+            mainTitle: "Tes Kemampuan Kognitif Dasar Pra-Masuk",
+            mainDesc: "Tes ini mengukur dasar memori untuk menghafal bahasa (daya ingat jangka pendek) dan kecepatan pemecahan masalah (berpikir logis) tanpa kendala bahasa. Terdiri dari teka-teki gambar dan matematika.",
+            infoBox: "• <strong>Batas Waktu:</strong> 5 Menit (Total 10 Soal)<br>• <strong>Soal 1-5:</strong> Teka-teki logika pola gambar<br>• <strong>Soal 6-10:</strong> Aturan angka & tes memori jangka pendek",
+            startBtn: "Mulai Tes →", progress: "Soal {current} dari {total}",
+            instructionVisual: "Pilih jawaban yang paling logis untuk mengisi bagian yang kosong:",
+            instructionMath: "Pilih angka yang paling logis untuk mengisi bagian yang kosong:",
+            instructionMemoryBefore: "⚠️ Ingat dan hafalkan angka di layar dalam waktu 3 detik!",
+            instructionMemoryAfter: "Pilih deretan angka yang sama dengan angka yang baru saja hilang:",
+            resultHeading: "Hasil Analisis Kemampuan Kognitif"
+        },
+        ne: {
+            navTitle: "Kognitif क्षमता परीक्षण", navStats: "तर्क र स्मरण शक्ति मापन",
+            mainTitle: "प्रवेश पूर्व आधारभूत कग्निटिभ क्षमता परीक्षण",
+            mainDesc: "यो परीक्षणले उम्मेदवारको भाषा सम्झने आधार (अल्पकालीन स्मरण शक्ति) र समस्या समाधानको गति (तार्किक सोच) लाई मापन गर्दछ।",
+            infoBox: "• <strong>समय सीमा:</strong> ५ मिनेट (जम्मा १० प्रश्न)<br>• <strong>पहिलो ५ प्रश्न:</strong> चित्रको नियम पत्ता लगाउने पजल<br>• <strong>अन्तिम ५ प्रश्न:</strong> जापानी भाषा सिक्ने क्षमतासँग सम्बन्धित स्मरण शक्ति परीक्षण",
+            startBtn: "परीक्षण सुरु गर्नुहोस् →", progress: "प्रश्न {total} को {current}",
+            instructionVisual: "खाली ठाउँ भर्नको लागि सबैभन्दा उपयुक्त विकल्प छनोट गर्नुहोस्:",
+            instructionMath: "खाली ठाउँ भर्नको लागि सबैभन्दा उपयुक्त नम्बर छनोट गर्नुहोस्:",
+            instructionMemoryBefore: "⚠️ ३ सेकेन्ड भित्र, स्क्रिनको नम्बर अनिवार्य रूपमा सम्झनुहोस्!",
+            instructionMemoryAfter: "अहिले हराएको नम्बरसँग मिल्ने सही नम्बर तलबाट छनोट गर्नुहोस्:",
+            resultHeading: "क्षमता मूल्याङ्कन नतिजा"
+        },
+        my: {
+            navTitle: "ဉာဏ်ရည်နှင့် မှတ်ဉာဏ် စစ်ဆေးမှု", navStats: "ယုတ္တိဗေဒနှင့် မှတ်ဉာဏ်တိုင်းတာခြင်း",
+            mainTitle: "ကျောင်းမဝင်မီ အခြေခံဉာဏ်ရည်နှင့် မှတ်ဉာဏ်စစ်ဆေးမှု",
+            mainDesc: "ဤစစ်ဆေးမှုသည် ဘာသာစကားအခက်အခဲမရှိဘဲ ကျောင်းသား၏ (ရေတိုမှတ်ဉာဏ်စွမ်းရည်) နှင့် ပြဿနာဖြေရှင်းနိုင်စွမ်း (ယုတ္တိဗေဒ) ကို တိုင်းတာရန်ဖြစ်သည်။",
+            infoBox: "• <strong>အချိန်စံနှုန်း:</strong> ၅ မိနစ် (မေးခွန်း ၁၀ ခု)<br>• <strong>မေးခွန်း ၁-၅:</strong> ရုပ်ပုံအခြေခံ ယုတ္တိဗေဒပဟေဠိများ<br>• <strong>မေးခွန်း ၆-၁၀:</strong> ဂျပန်စာသင်ယူနိုင်စွမ်းနှင့် တိုက်ရိုက်သက်ဆိုင်သော ရေတိုမှတ်ဉာဏ်စစ်ဆေးမှု",
+            startBtn: "စစ်ဆေးမှု စတင်ရန် →", progress: "မေးခွန်း {total} ၏ {current}",
+            instructionVisual: "ကွက်လပ်ကို ဖြည့်စွက်ရန် အသင့်တော်ဆုံး အဖြေကို ရွေးချယ်ပါ-",
+            instructionMath: "ကွက်လပ်ကို ဖြည့်စွက်ရန် အသင့်တော်ဆုံး ဂဏန်းကို ရွေးချယ်ပါ-",
+            instructionMemoryBefore: "⚠️ ၃ စက္ကန့်အတွင်း စခရင်ပေါ်ရှိ ဂဏန်းများကို အလွတ်မှတ်သားပါ!",
+            instructionMemoryAfter: "ယခုလေးတင် ပျောက်သွားသော ဂဏန်းများနှင့် တူညီသော အဖြေကို ရွေးချယ်ပါ-",
+            resultHeading: "ဉာဏ်ရည်စွမ်းရည် ခွဲခြမ်းစိတ်ဖြာမှုရလဒ်"
+        }
+    };
+
+    const questions = [
+        {
+            type: 'visual',
+            content: `<svg width="300" height="90" viewBox="0 0 300 90">
+                <rect x="10" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                <circle cx="28" cy="45" r="10" fill="#1d4ed8"/>
+                <rect x="110" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                <circle cx="145" cy="45" r="10" fill="#1d4ed8"/>
+                <rect x="210" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4"/>
+                <text x="238" y="53" font-size="24" font-weight="bold" fill="#94a3b8">?</text>
+            </svg>`,
+            options: [
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><circle cx="20" cy="35" r="10" fill="#1d4ed8"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><circle cx="52" cy="35" r="10" fill="#1d4ed8"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><rect x="25" y="25" width="20" height="20" fill="#1d4ed8"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="10" fill="#ea580c"/></svg>` }
+            ],
+            correct: 1
+        },
+        {
+            type: 'visual',
+            content: `<svg width="300" height="90" viewBox="0 0 300 90">
+                <rect x="10" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="45" y1="20" x2="45" y2="70" stroke="#1e293b" stroke-width="4"/>
+                <rect x="110" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="135" y1="20" x2="135" y2="70" stroke="#1e293b" stroke-width="4"/>
+                <line x1="155" y1="20" x2="155" y2="70" stroke="#1e293b" stroke-width="4"/>
+                <rect x="210" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4"/>
+                <text x="238" y="53" font-size="24" font-weight="bold" fill="#94a3b8">?</text>
+            </svg>`,
+            options: [
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="10" fill="#1d4ed8"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><line x1="35" y1="15" x2="35" y2="55" stroke="#1e293b" stroke-width="4"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><line x1="20" y1="15" x2="20" y2="55" stroke="#1e293b" stroke-width="4"/><line x1="35" y1="15" x2="35" y2="55" stroke="#1e293b" stroke-width="4"/><line x1="50" y1="15" x2="50" y2="55" stroke="#1e293b" stroke-width="4"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><rect x="20" y="20" width="30" height="30" fill="#ea580c"/></svg>` }
+            ],
+            correct: 2
+        },
+        {
+            type: 'visual',
+            content: `<svg width="300" height="90" viewBox="0 0 300 90">
+                <rect x="10" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="25" y1="20" x2="65" y2="70" stroke="#1d4ed8" stroke-width="4"/>
+                <line x1="25" y1="70" x2="65" y2="20" stroke="#1d4ed8" stroke-width="4"/>
+                <rect x="110" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="125" y1="20" x2="165" y2="70" stroke="#1d4ed8" stroke-width="4"/>
+                <rect x="210" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4"/>
+                <text x="238" y="53" font-size="24" font-weight="bold" fill="#94a3b8">?</text>
+            </svg>`,
+            options: [
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><line x1="20" y1="20" x2="50" y2="50" stroke="#1d4ed8" stroke-width="4"/><line x1="20" y1="50" x2="50" y2="20" stroke="#1d4ed8" stroke-width="4"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><line x1="20" y1="50" x2="50" y2="20" stroke="#1d4ed8" stroke-width="4"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="10" fill="#ea580c"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"></svg>` }
+            ],
+            correct: 1
+        },
+        {
+            type: 'visual',
+            content: `<svg width="300" height="90" viewBox="0 0 300 90">
+                <rect x="10" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                <polygon points="45,22 25,58 65,58" fill="#1d4ed8"/>
+                <rect x="110" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                <polygon points="145,58 125,22 165,22" fill="#1d4ed8"/>
+                <rect x="210" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4"/>
+                <text x="238" y="53" font-size="24" font-weight="bold" fill="#94a3b8">?</text>
+            </svg>`,
+            options: [
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><rect x="20" y="20" width="30" height="30" fill="#1d4ed8"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><polygon points="35,50 15,15 55,15" fill="#1d4ed8"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><polygon points="35,15 15,50 55,50" fill="#1d4ed8"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="15" fill="#ea580c"/></svg>` }
+            ],
+            correct: 2
+        },
+        {
+            type: 'visual',
+            content: `<svg width="300" height="90" viewBox="0 0 300 90">
+                <rect x="10" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                <g transform="translate(45,45) rotate(0)"><line x1="0" y1="18" x2="0" y2="-18" stroke="#1e293b" stroke-width="4"/><polygon points="0,-22 -6,-8 6,-8" fill="#1e293b"/></g>
+                <rect x="110" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                <g transform="translate(145,45) rotate(45)"><line x1="0" y1="18" x2="0" y2="-18" stroke="#1e293b" stroke-width="4"/><polygon points="0,-22 -6,-8 6,-8" fill="#1e293b"/></g>
+                <rect x="210" y="10" width="70" height="70" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4"/>
+                <text x="238" y="53" font-size="24" font-weight="bold" fill="#94a3b8">?</text>
+            </svg>`,
+            options: [
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><g transform="translate(35,35) rotate(90)"><line x1="0" y1="15" x2="0" y2="-15" stroke="#1e293b" stroke-width="3"/><polygon points="0,-20 -5,-7 5,-7" fill="#1e293b"/></g></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><g transform="translate(35,35) rotate(180)"><line x1="0" y1="15" x2="0" y2="-15" stroke="#ea580c" stroke-width="3"/></g></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="10" fill="#1d4ed8"/></svg>` },
+                { text: '', isSvg: true, html: `<svg width="70" height="70" viewBox="0 0 70 70"><g transform="translate(35,35) rotate(0)"><line x1="0" y1="15" x2="0" y2="-15" stroke="#1e293b" stroke-width="3"/></g></svg>` }
+            ],
+            correct: 0
+        },
+        {
+            type: 'math',
+            content: `<div class="math-display">2, 4, 8, 16, ?</div>`,
+            options: [{ text: "20", isSvg: false }, { text: "24", isSvg: false }, { text: "32", isSvg: false }, { text: "64", isSvg: false }],
+            correct: 2
+        },
+        {
+            type: 'math',
+            content: `<div class="math-display">1, 4, 9, 16, ?</div>`,
+            options: [{ text: "20", isSvg: false }, { text: "25", isSvg: false }, { text: "30", isSvg: false }, { text: "36", isSvg: false }],
+            correct: 1
+        },
+        {
+            type: 'math',
+            content: `<div class="math-display" style="font-size:24px;">666 = 3<br>888 = 6<br>901 = 2<br>8809 = ?</div>`,
+            options: [{ text: "3", isSvg: false }, { text: "4", isSvg: false }, { text: "5", isSvg: false }, { text: "6", isSvg: false }],
+            correct: 3
+        },
+        {
+            type: 'math',
+            content: `<div class="math-display" id="memory-q1">7 3 9 1 5</div>`,
+            options: [{ text: "73195", isSvg: false }, { text: "73915", isSvg: false }, { text: "73951", isSvg: false }, { text: "37915", isSvg: false }],
+            correct: 1,
+            isMemory: true
+        },
+        {
+            type: 'math',
+            content: `<div class="math-display" id="memory-q2">4 8 2 6 3 9</div>`,
+            options: [{ text: "482639", isSvg: false }, { text: "486239", isSvg: false }, { text: "428639", isSvg: false }, { text: "482693", isSvg: false }],
+            correct: 0,
+            isMemory: true
+        }
+    ];
+
+    let currentLang = 'ja'; let currentQuestion = 0; let score = 0; let timeLeft = 300; let timerInterval;
+
+    function changeLanguage() {
+        currentLang = document.getElementById('langSelect').value;
+        const t = translations[currentLang];
+        document.getElementById('nav-title').innerText = t.navTitle;
+        document.getElementById('nav-stats').innerText = t.navStats;
+        document.getElementById('main-title').innerText = t.mainTitle;
+        document.getElementById('main-desc').innerText = t.mainDesc;
+        document.getElementById('info-box').innerHTML = t.infoBox;
+        document.getElementById('start-btn').innerText = t.startBtn;
+        document.getElementById('result-heading').innerText = t.resultHeading;
+        updateProgress();
+    }
+
+    function updateProgress() {
+        const t = translations[currentLang];
+        let progText = t.progress.replace('{current}', currentQuestion + 1).replace('{total}', questions.length);
+        document.getElementById('progress').innerText = progText;
+        let percentage = ((currentQuestion) / questions.length) * 100;
+        document.getElementById('progress-fill').style.width = `${percentage}%`;
+    }
+
+    function startTest() {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('test-screen').classList.remove('hidden');
+        loadQuestion(); startTimer();
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            let mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            let secs = (timeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('timer').innerText = `${mins}:${secs}`;
+            if (timeLeft <= 0) { clearInterval(timerInterval); endTest(); }
+        }, 1000);
+    }
+
+    function loadQuestion() {
+        updateProgress();
+        const q = questions[currentQuestion];
+        const qArea = document.getElementById('question-area');
+        const optionsArea = document.getElementById('options-area');
+        const guidance = document.getElementById('guidance-alert');
+        const inst = document.getElementById('instruction');
+        const t = translations[currentLang];
+        
+        qArea.innerHTML = q.content;
+        optionsArea.innerHTML = '';
+        guidance.classList.add('hidden');
+
+        if (q.type === 'visual') {
+            inst.innerText = t.instructionVisual;
+            renderOptions(q);
+        } else if (q.type === 'math' && !q.isMemory) {
+            inst.innerText = t.instructionMath;
+            renderOptions(q);
+        } else if (q.isMemory) {
+            // 【新ガイダンス機能】3秒間、大きく警告案内を表示する
+            inst.innerText = t.instructionMemoryBefore;
+            guidance.innerText = t.instructionMemoryBefore;
+            guidance.classList.remove('hidden');
+            optionsArea.style.pointerEvents = 'none'; // 数字が消えるまで選択肢は押せない
+
+            setTimeout(() => {
+                const mask = document.querySelector('.math-display');
+                if (mask) mask.innerText = "??????";
+                
+                // 数字が消えた後のガイダンス文にアップデート
+                inst.innerText = t.instructionMemoryAfter;
+                guidance.classList.add('hidden');
+                optionsArea.style.pointerEvents = 'auto';
+                renderOptions(q);
+            }, 3000);
+        }
+    }
+
+    function renderOptions(q) {
+        const optionsArea = document.getElementById('options-area');
+        optionsArea.innerHTML = '';
+        q.options.forEach((opt, idx) => {
+            const div = document.createElement('div');
+            div.className = 'option-card';
+            if (opt.isSvg) {
+                div.innerHTML = opt.html;
+            } else {
+                div.innerText = opt.text;
+            }
+            div.onclick = () => selectOption(idx);
+            optionsArea.appendChild(div);
+        });
+    }
+
+    function selectOption(idx) {
+        if (idx === questions[currentQuestion].correct) score++;
+        currentQuestion++;
+        if (currentQuestion < questions.length) { loadQuestion(); } else { clearInterval(timerInterval); endTest(); }
+    }
+
+    function endTest() {
+        document.getElementById('test-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        
+        let finalScore = score * 10;
+        document.getElementById('score-display').innerText = `${finalScore} / 100点`;
+
+        let reportHtml = `<strong>■ 日本人担当者向けの能力評価：</strong><br><br>`;
+        if (score >= 9) {
+            reportHtml += `【超優秀：知能・記憶力トップクラス】<br>図形の論理、数字の規則、短期記憶すべてにおいて完璧に近い結果です。日本語の単語や文法を覚えるスピードが非常に早く、入国後も最も早く日本の環境や技能をマスターできるポテンシャルを持っています。将来の幹部候補です。`;
+        } else if (score >= 6) {
+            reportHtml += `【優秀：平均以上の学習ポテンシャル】<br>基本的な論理的思考力と、言葉を覚えるための十分な記憶力の土台を持っています。日本語学校の標準的なカリキュラムであれば、サボらず真面目に続ければ確実にN4〜N3レベルをスムーズに取得できる能力を持っています。`;
+        } else if (score >= 4) {
+            reportHtml += `【標準：一般的な処理能力】<br>一般的な認知能力を備えています。ただし、後半の記憶力テストでミスが多い場合は、日本語の「単語の丸暗記」に少し時間がかかるタイプかもしれません。フラッシュカードなど視覚的に反復させる丁寧な教育が向いています。`;
+        } else {
+            reportHtml += `【要サポート：丁寧な初期教育が必要】<br>図形パズルや短期の数字記憶において、少し苦戦している傾向があります。日本語学校の授業では、一度にたくさんの単語を詰め込むとパンクしやすいため、少ないボリュームを毎日根気強く反復させるような、個別フォロー主体の指導が定着への近道です。`;
+        }
+        document.getElementById('report-desc').innerHTML = reportHtml;
+    }
+
+    changeLanguage();
+</script>
+</body>
+</html>
